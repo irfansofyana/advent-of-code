@@ -1,78 +1,26 @@
 package main
 
 import (
-	"bufio"
-	"errors"
-	"fmt"
 	"log"
-	"os"
 	"sort"
-	"strconv"
-	"strings"
+
+	"common"
 )
 
-func readInput() ([]int, []int, error) {
-	firstArr := make([]int, 0)
-	secondArr := make([]int, 0)
-
-	file, err := os.Open("input.txt")
-	if err != nil {
-		fmt.Printf("Error opening file: %v\n", err)
-		return firstArr, secondArr, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-
-	for scanner.Scan() {
-		line := scanner.Text()
-
-		numbers := strings.Fields(line)
-
-		if len(numbers) == 2 {
-			num1, err1 := strconv.Atoi(numbers[0])
-			num2, err2 := strconv.Atoi(numbers[1])
-
-			if err1 == nil && err2 == nil {
-				firstArr = append(firstArr, num1)
-				secondArr = append(secondArr, num2)
-			}
-
-			if err1 != nil || err2 != nil {
-				return firstArr, secondArr, errors.New("error parsing the numbers")
-			}
-		}
-	}
-
-	if err := scanner.Err(); err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
-		return firstArr, secondArr, err
-	}
-
-	return firstArr, secondArr, nil
-}
-
-func absDiff(a, b int) int {
-	if a < b {
-		return b - a
-	}
-
-	return a - b
-}
-
 func main() {
-	firstArr, secondArr, err := readInput()
+	firstNums, secondNums, err := common.ReadNumberPairs("input.txt")
 	if err != nil {
-		log.Fatal("error reading input file")
+		log.Fatalf("Failed to read input: %v", err)
 	}
 
-	sort.Ints(firstArr)
-	sort.Ints(secondArr)
+	// Sort both arrays to minimize absolute differences
+	sort.Ints(firstNums)
+	sort.Ints(secondNums)
 
-	ans := 0
-	for i := 0; i < len(firstArr); i++ {
-		ans += absDiff(firstArr[i], secondArr[i])
+	totalDiff := 0
+	for i := 0; i < len(firstNums); i++ {
+		totalDiff += common.AbsDiff(firstNums[i], secondNums[i])
 	}
 
-	log.Println("abs diff", ans)
+	log.Printf("Total absolute difference: %d", totalDiff)
 }
