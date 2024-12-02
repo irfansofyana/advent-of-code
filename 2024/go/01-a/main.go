@@ -13,7 +13,6 @@ func main() {
 		log.Fatalf("Failed to read input: %v", err)
 	}
 
-	// Sort both arrays to minimize absolute differences
 	sort.Ints(firstNums)
 	sort.Ints(secondNums)
 
