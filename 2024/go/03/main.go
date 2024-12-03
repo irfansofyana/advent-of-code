@@ -35,10 +35,6 @@ func findSolution(input string) {
 		return matches[i].pos < matches[j].pos
 	})
 
-	for _, m := range matches {
-		fmt.Println(m.pos, m.text)
-	}
-
 	shouldMultiply := true
 	var sum int64 = 0
 	for _, m := range matches {
